@@ -1,0 +1,4 @@
+*.vscode
+*.xlsx#
+*.env
+CheckupChallenge
