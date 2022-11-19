@@ -69,7 +69,7 @@ class ExcelToDatabase:
         print("Datas for GRUPO has been transfered")
 
     def produto(self):
-        ''' Envia somente os pedidos para o banco de dados.\n
+        ''' Envia somente os produtos para o banco de dados.\n
         '''
         try:
             cnn = mysql.connector.connect(host=self.HOST, user=self.UID, passwd=self.PASS, database=self.database)
@@ -77,23 +77,57 @@ class ExcelToDatabase:
         except:
             print("Database has failed to connect")
             exit()
-        read = pd.read_excel(self.pathToSheetVmar,sheet_name='Vendas')
-        read2 = pd.read_excel(self.pathToSheetProds,sheet_name='TbProduto')
+        read = pd.read_excel(self.pathToSheetProds,sheet_name='TbProduto')
         
-        prodID = read2['ID Produto']
-        grupo = read2['Grupo']
-        preco = read['ID Cliente']
+        prodID = read['ID Produto']
+        grupo = read['Grupo']
         db = cnn.cursor()
-        for i in range(len(cliID)):
-            SQL_ = f"INSERT INTO PEDIDO(codigo,datat,id_cliente) VALUES ('{codigos[i]}','{datas[i]}',{cliID[i]})"
+        for i in range(len(prodID)):
+            SQL_ = f"INSERT INTO PRODUTO(id,grupo) VALUES ({prodID[i]},'{grupo[i]}')"
             db.execute(SQL_)
         cnn.commit() 
         db.close()
         cnn.close()
-        print("Datas for PEDIDOS has been transfered")
+        print("Datas for PRODUTOS has been transfered")
 
     def meta(self):
-        pass
+        ''' Envia somente as metas para o banco de dados.\n
+        '''
+        try:
+            cnn = mysql.connector.connect(host=self.HOST, user=self.UID, passwd=self.PASS, database=self.database)
+
+        except:
+            print("Database has failed to connect")
+            exit()
+
+        read = pd.read_excel(self.pathToSheetProds,sheet_name='TbMeta')
+        
+        prodID = read['Produto']
+        newProd = []
+        for i in range(len(prodID)):
+            newProd.append(prodID[i].replace('Produto ', ''))
+
+        datas = read['Data']
+        newDatas = []
+        for i in range(len(datas)):
+            temp = datas[i].split('-')
+            mesDict = {"janeiro":1,"fevereiro":2,"março":3,"abril":4,"maio":5,"junho":6,"julho":7,"agosto":8,"setembro":9,"outubro":10,"novembro":11,"dezembro":12}
+            mes = mesDict[temp[0]]
+            ano = temp[1]
+            newString = f"{ano}-{mes}-01"
+            newDatas.append(newString)
+
+
+        meta = read['Meta']
+        
+        db = cnn.cursor()
+        for i in range(len(prodID)):
+            SQL_ = f"INSERT INTO META(data1,id,vendas) VALUES ('{newDatas[i]}',{newProd[i]},{meta[i]})"
+            db.execute(SQL_)
+        cnn.commit() 
+        db.close()
+        cnn.close()
+        print("Datas for METAS has been transfered")
 
     def pedido(self):
         ''' Envia somente os pedidos para o banco de dados.\n
@@ -104,15 +138,29 @@ class ExcelToDatabase:
         except:
             print("Database has failed to connect")
             exit()
+
         read = pd.read_excel(self.pathToSheetVmar,sheet_name='Vendas')
         
         codigos = read['Pedido']
         datas = read['Data']
         cliID = read['ID Cliente']
+        prodID = read['ID Produto']
+        qnt = read['Quantidade']
+        precoUnit = read['Preço Unitário']
+        custoUnit = read['Custo Unitário']
+                
+
         db = cnn.cursor()
         for i in range(len(cliID)):
-            SQL_ = f"INSERT INTO PEDIDO(codigo,datat,id_cliente) VALUES ('{codigos[i]}','{datas[i]}',{cliID[i]})"
-            db.execute(SQL_)
+            margem = (precoUnit[i]/custoUnit[i]) -1
+            datat = str(datas[i]).split(' ')[0]
+            try:
+                SQL_ = f"INSERT INTO PEDIDO(codigo,id_produto,datat,id_cliente,preco,custo,margem,quantidade) VALUES ('{codigos[i]}',{prodID[i]},'{datat}',{cliID[i]},{precoUnit[i]},{custoUnit[i]},{margem},{qnt[i]})"
+                db.execute(SQL_)
+            except:
+                print(f"duplicata codigo {codigos[i]} e idProduto {prodID[i]}")
+                pass #ignora as duplicatas
+
         cnn.commit() 
         db.close()
         cnn.close()
@@ -129,6 +177,4 @@ class ExcelToDatabase:
         self.pedido()        
 
 excel1 = ExcelToDatabase(HOST,UID,PASS)
-#excel1.cliente() 
-#excel1.grupo()
-excel1.produto()
+excel1.transfer()
