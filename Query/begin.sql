@@ -1,5 +1,4 @@
 create database checkup;
-show databases;
 use checkup;
 
 create table CLIENTE(
@@ -22,4 +21,29 @@ custo float NOT NULL,
 margem float,
 PRIMARY KEY (id),
 foreign key (grupo) references GRUPO(nome)
+);
+
+create table META(
+	data1 date NOT NULL,
+    id mediumint NOT NULL,
+    vendas float,
+    PRIMARY KEY (data1,id),
+    FOREIGN KEY (id) REFERENCES PRODUTO(id)
+);
+
+create table PEDIDO(
+	codigo varchar(20) NOT NULL,
+    datat date,
+    id_cliente mediumint NOT NULL,
+    primary key (codigo),
+    foreign key (id_cliente) references CLIENTE(id)
+);
+
+create table VENDIDO(
+	id mediumint NOT NULL,
+    codigo varchar(11) NOT NULL,
+	quantidade int NOT NULL,
+    PRIMARY KEY(id,codigo),
+    foreign key (id) references PRODUTO(id),
+    foreign key (codigo) references PEDIDO(codigo)
 );
