@@ -1,10 +1,13 @@
 # Chekup
 Checkup Challenge
+- Mission in a sheet of "Dados2021 vmar22 Envio.xlsx"
+- Some data in the workbook "Dados2021 vmar22 Envio.xlsx"
+- Some data in "DadosProdutos.xlsx"
 
 To run that aplication, follow the steps:
 - Python 3 ou superior pelo site oficial
 - Clone a aplicação
-- Entrar no diretorio e abrir o SHELL
+- Enter at the cloned directory and open SHELL
 
 Installing Venv (SHELL):
 - python -m pip install --upgrade pip
@@ -17,9 +20,13 @@ Creating Virtual Environment for python:
 
 Setting up environment:
 -Create a '.env' file and put your credentials:
-    HOST=<serverIP|localhost>
-    UID=<user>
-    PASS=<password>
+    - HOST=<serverIP|localhost>
+    - UID=<user>
+    - PASS=<password>
 
 Setting up MySQL Server:
-- Na pasta Query execute as querys de nome "Begin.sql"
+- In the folder begin.sql execute in mysql server "Begin.sql"
+
+More information:
+- Relational Model pĺanning at RelationalSchema.txt
+- Entity and Relationships diagram at EntityDiagramCheckup.jpg

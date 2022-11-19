@@ -1,0 +1,6 @@
+CLIENTE(id*,nome)
+GRUPO(nome*,imposto)
+PRODUTO(id*,grupo(GRUPO.nome),preco,custo,margem)
+META(data*,id(PRODUTO.id)*,vendas)
+PEDIDO(codigo*,data,id_cliente(CLIENTE.id))
+VENDIDO(id(PRODUTO.id)*,codigo(PEDIDO.codigo)*,quantidade)
