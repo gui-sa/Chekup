@@ -33,17 +33,11 @@ create table META(
 
 create table PEDIDO(
 	codigo varchar(20) NOT NULL,
+    id_produto mediumint NOT NULL,
     datat date,
     id_cliente mediumint NOT NULL,
-    primary key (codigo),
-    foreign key (id_cliente) references CLIENTE(id)
-);
-
-create table VENDIDO(
-	id mediumint NOT NULL,
-    codigo varchar(11) NOT NULL,
-	quantidade int NOT NULL,
-    PRIMARY KEY(id,codigo),
-    foreign key (id) references PRODUTO(id),
-    foreign key (codigo) references PEDIDO(codigo)
+    quantidade int NOT NULL,
+    primary key (codigo,id_produto),
+    foreign key (id_cliente) references CLIENTE(id),
+    foreign key (id_produto) references PRODUTO(id)
 );
