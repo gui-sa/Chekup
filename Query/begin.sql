@@ -16,9 +16,6 @@ PRIMARY KEY (nome)
 create table PRODUTO(
 id mediumint NOT NULL AUTO_INCREMENT,
 grupo varchar(2) NOT NULL,
-preco float NOT NULL,
-custo float NOT NULL,
-margem float,
 PRIMARY KEY (id),
 foreign key (grupo) references GRUPO(nome)
 );
@@ -37,6 +34,9 @@ create table PEDIDO(
     datat date,
     id_cliente mediumint NOT NULL,
     quantidade int NOT NULL,
+    preco float NOT NULL,
+    custo float NOT NULL,
+    margem float,
     primary key (codigo,id_produto),
     foreign key (id_cliente) references CLIENTE(id),
     foreign key (id_produto) references PRODUTO(id)

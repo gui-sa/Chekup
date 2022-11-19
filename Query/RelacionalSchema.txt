@@ -1,5 +1,5 @@
 CLIENTE(id*,nome)
 GRUPO(nome*,imposto)
-PRODUTO(id*,grupo(GRUPO.nome),preco,custo,margem)
+PRODUTO(id*,grupo(GRUPO.nome))
 META(data1*,id(PRODUTO.id)*,vendas)
-PEDIDO(codigo*,id_produto(PRODUTO.id)*,datat,id_cliente(CLIENTE.id),quantidade)
+PEDIDO(codigo*,id_produto(PRODUTO.id)*,datat,id_cliente(CLIENTE.id),preco,custo,margem,quantidade)
